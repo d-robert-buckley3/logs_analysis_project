@@ -9,6 +9,8 @@ This script was designed to be run with the provided database available here:
 
 https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip
 
+## Views
+
 The script makes use of the following views.  Here are their names and the 'create view' statements used to create them.
 
 ### error_counts
