@@ -19,14 +19,14 @@ class GenerateLogReports():
         """
         pass
 
-    def find_top3_articles(self):
+    def add_top3_articles(self):
         """
         Add a section to the report with info about the top 3 articles
         measured according to number of GET requests
         """
         pass
 
-    def find_top3_authors(self):
+    def add_top3_authors(self):
         """
         Add the Top 3 Authors section to the report.  This section shows
         the top 3 authors according to number of GET requests on all written
@@ -34,7 +34,7 @@ class GenerateLogReports():
         """
         pass
 
-    def find_high_error_days(self):
+    def add_high_error_days(self):
         """
         Add the High Error Days section to the report.  This section shows
         all days within the month where the number of requests resulting in
