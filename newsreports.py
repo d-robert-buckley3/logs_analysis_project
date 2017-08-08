@@ -17,7 +17,7 @@ class GenerateLogReports():
         """
         Dump the assembled report to an output file and the screen
         """
-        pass
+        print(self.report)
 
     def format_results(self, results, headers):
         """
@@ -59,7 +59,7 @@ class GenerateLogReports():
         any status other than '200' (errors) exceed 1 percent of the total
         number of requests for that day.
         """
-        
+
         query = """
         select day, requests, errors,
         round(((errors::numeric / requests::numeric) * 100.0),2) as err_percent
@@ -80,4 +80,5 @@ class GenerateLogReports():
 
 if __name__ == '__main__':
     logreport = GenerateLogReports()
-    logreport.generate_report()
+    logreport.add_high_error_days()
+    logreport.dump_report()
