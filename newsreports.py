@@ -6,7 +6,7 @@ import psycopg2
 
 class GenerateLogReports():
     """
-    This class is used to generate all reports based the blog's http logs.
+    This class is used to generate all reports based on the blog's http logs.
     """
 
     def __init__(self):
@@ -19,17 +19,17 @@ class GenerateLogReports():
         """
         print(self.report)
 
-    def format_results(self, results, headers):
+    def format_results(self, results):
         """
         Format query results into a table for reporting
         """
         col_width = max([len(str(item)) for item in results[0]])
+
         divider = []
         for i in range(len(results[0])):
             divider.append('-' * col_width)
 
-        results.insert(0, tuple(divider))
-        results.insert(0, tuple(headers))
+        results.insert(1, tuple(divider))
 
         output = ""
         for result in results:
@@ -37,6 +37,21 @@ class GenerateLogReports():
             output += '\n'
 
         return output
+
+    def query_log(self, query):
+        """
+        Submit a query to the database and return the results.
+        Column headers stored in cursor.description are inserted to the head
+        of the results list
+        """
+        with psycopg2.connect(database=self.DBNAME) as db:
+            with db.cursor() as c:
+                c.execute(query)
+                results = c.fetchall()
+                headers = [desc[0] for desc in c.description]
+
+        results.insert(0, headers)
+        return results
 
     def add_top3_articles(self):
         """
@@ -70,14 +85,9 @@ class GenerateLogReports():
 
         self.report += "Days with > 1% errors\n"
 
-        with psycopg2.connect(database=self.DBNAME) as db:
-            with db.cursor() as c:
-                c.execute(query)
-                results = c.fetchall()
-                headers = [desc[0] for desc in c.description]
-
-        output = self.format_results(results, headers)
-        self.report += output
+        results = self.query_log(query)
+        text_results = self.format_results(results)
+        self.report += text_results
         self.report += '\n\n'
 
 
