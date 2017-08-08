@@ -23,7 +23,7 @@ class GenerateLogReports():
         """
         Format query results into a table for reporting
         """
-        col_width = max([len(item) for item in results[0]])
+        col_width = max([len(str(item)) for item in results[0]])
         divider = []
         for i in range(len(results[0])):
             divider.append('-' * col_width)
@@ -34,6 +34,7 @@ class GenerateLogReports():
         output = ""
         for result in results:
             output += '|'.join(str(item).ljust(col_width) for item in result)
+            output += '\n'
 
         return output
 
@@ -67,6 +68,8 @@ class GenerateLogReports():
         where errors > (requests / 100);
         """
 
+        self.report += "Days with > 1% errors\n"
+
         with psycopg2.connect(database=self.DBNAME) as db:
             with db.cursor() as c:
                 c.execute(query)
@@ -75,6 +78,7 @@ class GenerateLogReports():
 
         output = self.format_results(results, headers)
         self.report += output
+        self.report += '\n\n'
 
 
 
