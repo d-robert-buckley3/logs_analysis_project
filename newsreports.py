@@ -13,9 +13,9 @@ class GenerateLogReports():
     def __init__(self):
         pass
 
-    def generate_report(self):
+    def dump_report(self):
         """
-        Assemble a report on the HTTP log from sections requested
+        Dump the assembled report to an output file and the screen
         """
         pass
 
