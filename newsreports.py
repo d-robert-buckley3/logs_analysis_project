@@ -3,7 +3,6 @@
 # Please see the README.md for information about this script's requirements
 
 import psycopg2
-DBNAME = "news"
 
 class GenerateLogReports():
     """
@@ -11,13 +10,32 @@ class GenerateLogReports():
     """
 
     def __init__(self):
-        pass
+        self.report = ""
+        self.DBNAME="news"
 
     def dump_report(self):
         """
         Dump the assembled report to an output file and the screen
         """
         pass
+
+    def format_results(self, results, headers):
+        """
+        Format query results into a table for reporting
+        """
+        col_width = max([len(item) for item in results[0]])
+        divider = []
+        for i in range(len(results[0])):
+            divider.append('-' * col_width)
+
+        results.insert(0, tuple(divider))
+        results.insert(0, tuple(headers))
+
+        output = ""
+        for result in results:
+            output += '|'.join(str(item).ljust(col_width) for item in result)
+
+        return output
 
     def add_top3_articles(self):
         """
@@ -41,12 +59,24 @@ class GenerateLogReports():
         any status other than '200' (errors) exceed 1 percent of the total
         number of requests for that day.
         """
+        
         query = """
         select day, requests, errors,
         round(((errors::numeric / requests::numeric) * 100.0),2) as err_percent
         from error_counts
         where errors > (requests / 100);
         """
+
+        with psycopg2.connect(database=self.DBNAME) as db:
+            with db.cursor() as c:
+                c.execute(query)
+                results = c.fetchall()
+                headers = [desc[0] for desc in c.description]
+
+        output = self.format_results(results, headers)
+        self.report += output
+
+
 
 if __name__ == '__main__':
     logreport = GenerateLogReports()
