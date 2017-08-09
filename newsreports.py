@@ -19,10 +19,14 @@ class GenerateLogReports():
         """
         print(self.report)
 
-    def format_results(self, results):
+    def format_results(self, results, message):
         """
         Format query results into a table for reporting
         """
+        output = ""
+        bar = '=' * len(message)
+        output += '\n'.join([bar, message, bar, ''])
+
         col_width = max([len(str(item)) for item in results[0]])
 
         divider = []
@@ -31,7 +35,6 @@ class GenerateLogReports():
 
         results.insert(1, tuple(divider))
 
-        output = ""
         for result in results:
             output += '|'.join(str(item).ljust(col_width) for item in result)
             output += '\n'
@@ -71,7 +74,7 @@ class GenerateLogReports():
     def add_high_error_days(self):
         """
         Add the High Error Days section to the report.  This section shows
-        all days within the month where the number of requests resulting in
+        all days where the number of requests resulting in
         any status other than '200' (errors) exceed 1 percent of the total
         number of requests for that day.
         """
@@ -83,10 +86,10 @@ class GenerateLogReports():
         where errors > (requests / 100);
         """
 
-        self.report += "Days with > 1% errors\n"
+        message = "Days with > 1% errors\n"
 
         results = self.query_log(query)
-        text_results = self.format_results(results)
+        text_results = self.format_results(results, message)
         self.report += text_results
         self.report += '\n\n'
 
