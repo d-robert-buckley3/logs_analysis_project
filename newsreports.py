@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # Logs Analysis project
 # for Udacity FSND SQL course (nd004)
 # Please see the README.md for information about this script's requirements
@@ -56,6 +57,15 @@ class GenerateLogReports():
         results.insert(0, headers)
         return results
 
+    def add_report_section(self, query, message):
+        """
+        Appends a section to the report
+        """
+        results = self.query_log(query)
+        text_results = self.format_results(results, message)
+        self.report += text_results
+        self.report += '\n\n'
+
     def add_top3_articles(self):
         """
         Add a section to the report with info about the top 3 articles
@@ -88,10 +98,7 @@ class GenerateLogReports():
 
         message = "Days with > 1% errors\n"
 
-        results = self.query_log(query)
-        text_results = self.format_results(results, message)
-        self.report += text_results
-        self.report += '\n\n'
+        self.add_report_section(query, message)
 
 
 
