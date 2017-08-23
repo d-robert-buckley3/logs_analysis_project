@@ -28,7 +28,7 @@ class GenerateLogReports():
         bar = '=' * len(message)
         output += '\n'.join([bar, message, bar, ''])
 
-        col_width = max([len(str(item)) for item in results[0]])
+        col_width = max([len(str(item)) for sublist in results for item in sublist])
 
         divider = []
         for i in range(len(results[0])):
@@ -71,7 +71,16 @@ class GenerateLogReports():
         Add a section to the report with info about the top 3 articles
         measured according to number of GET requests
         """
-        pass
+        query = """
+        select articles.title, top3articles.hits
+        from articles, top3articles
+        where articles.slug like top3articles.path
+        order by hits desc;
+        """
+
+        message = "Top 3 Articles by successful hits"
+
+        self.add_report_section(query, message)
 
     def add_top3_authors(self):
         """
@@ -79,7 +88,10 @@ class GenerateLogReports():
         the top 3 authors according to number of GET requests on all written
         articles.
         """
-        pass
+
+        query = """
+        """
+
 
     def add_high_error_days(self):
         """
@@ -87,6 +99,8 @@ class GenerateLogReports():
         all days where the number of requests resulting in
         any status other than '200' (errors) exceed 1 percent of the total
         number of requests for that day.
+
+        This section relies on the view error_counts.
         """
 
         query = """
@@ -96,7 +110,7 @@ class GenerateLogReports():
         where errors > (requests / 100);
         """
 
-        message = "Days with > 1% errors\n"
+        message = "Days with > 1% errors"
 
         self.add_report_section(query, message)
 
@@ -104,5 +118,6 @@ class GenerateLogReports():
 
 if __name__ == '__main__':
     logreport = GenerateLogReports()
+    logreport.add_top3_articles()
     logreport.add_high_error_days()
     logreport.dump_report()
