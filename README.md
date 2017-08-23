@@ -22,3 +22,14 @@ count(case when status != '200 OK' then 1 end) as errors
 from log
 group by day;
 ~~~~
+
+### top_3_articles
+
+~~~~
+create view top3articles as (
+select substring(path from 10) as path, count(*) as hits from log
+where status = '200 OK' and path != '/'
+group by path
+order by hits desc
+limit 3);
+~~~~
