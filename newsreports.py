@@ -90,7 +90,19 @@ class GenerateLogReports():
         """
 
         query = """
+        select authors.name, count(*) as hits
+        from authors, articles, log
+        where log.status = '200 OK'
+        and log.path != '/'
+        and articles.slug like substring(log.path from 10)
+        and articles.author = authors.id
+        group by authors.name
+        order by hits desc;
         """
+
+        message = "Top 3 Authors by total hits"
+
+        self.add_report_section(query, message)
 
 
     def add_high_error_days(self):
@@ -118,6 +130,7 @@ class GenerateLogReports():
 
 if __name__ == '__main__':
     logreport = GenerateLogReports()
+    logreport.add_top3_authors()
     logreport.add_top3_articles()
     logreport.add_high_error_days()
     logreport.dump_report()
