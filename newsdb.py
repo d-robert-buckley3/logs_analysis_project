@@ -1,4 +1,6 @@
-# class for handling connections and queries from the News database
+#!/usr/bin/python3
+# class for creating a report from different sections based on
+# different queries
 
 import psycopg2
 
