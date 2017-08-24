@@ -28,19 +28,43 @@ class GenerateLogReports():
         bar = '=' * len(message)
         output += '\n'.join([bar, message, bar, ''])
 
-        col_width = max([len(str(item)) for sublist in results for item in sublist])
+        col_widths = self.get_col_widths(results)
 
         divider = []
-        for i in range(len(results[0])):
+        for col_width in col_widths:
             divider.append('-' * col_width)
 
         results.insert(1, tuple(divider))
 
+        row_format = ""
+        for col_width in col_widths:
+            row_format += "{:%s}|" % col_width
+        if row_format.endswith('|'):
+            row_format = row_format[:-1]
+
         for result in results:
-            output += '|'.join(str(item).ljust(col_width) for item in result)
+            output += row_format.format(
+                *[item if (isinstance(item, int))
+                    else str(item) for item in result]
+                )
             output += '\n'
 
         return output
+
+    def get_col_widths(self, results):
+        """
+        Calculate the desired column width for each column based on largest
+        item in that column
+
+        Return list of column widths, one width for each column
+        """
+        col_widths = []
+        columns = len(results[0])
+
+        for column in range(columns):
+            col_widths.append(max([len(str(item[column])) for item in results]))
+
+        return col_widths
 
     def query_log(self, query):
         """
