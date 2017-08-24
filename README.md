@@ -66,10 +66,9 @@ group by day;
 ### top_3_articles
 
 ~~~~sql
-create view top3articles as (
-select substring(path from 10) as path, count(*) as hits from log
+create view top_articles as (
+select path, count(*) as hits from log
 where status = '200 OK' and path != '/'
 group by path
-order by hits desc
-limit 3);
+order by hits desc;
 ~~~~

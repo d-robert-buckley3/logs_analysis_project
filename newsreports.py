@@ -8,10 +8,11 @@ from newsdb import GenerateLogReports
 report_sections = [
     {
         'query': """
-            select articles.title, top3articles.hits
-            from articles, top3articles
-            where articles.slug like top3articles.path
-            order by hits desc;
+            select articles.title, top_articles.hits
+            from articles, top_articles
+            where '/article/' || articles.slug like top_articles.path
+            order by hits desc
+            limit 3;
         """,
         'message': "Top 3 Articles by successful hits"
     },
@@ -21,7 +22,7 @@ report_sections = [
             from authors, articles, log
             where log.status = '200 OK'
             and log.path != '/'
-            and articles.slug like substring(log.path from 10)
+            and '/article/' || articles.slug like log.path
             and articles.author = authors.id
             group by authors.name
             order by hits desc;
