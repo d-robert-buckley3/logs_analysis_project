@@ -39,7 +39,7 @@ I'm considering making my own Docker image to run the database.  We shall see.
 
 To run this script and generate the report:
 
-~~~~
+~~~~shell
 python3 newsreports.py
 ~~~~
 
@@ -47,15 +47,15 @@ The script creates a log generator object which is used to add sections to a rep
 
 ## Views
 
-The script makes use of the following views.  Below are their names and the 'create view' statements used to create them. However, it's easiest to install them using the provided script with the psql tool like so:
+The script makes use of the following views.  Below are their names and the 'create view' statements used to create them. The CREATE VIEW statements can be executed in the psql tool manually.  However, it's easiest to install them using the provided script with the psql tool like so:
 
-~~~~
+~~~~shell
 psql -d news -f create_views.sql
 ~~~~
 
 ### error_counts
 
-~~~~
+~~~~sql
 create view error_counts as
 select time::date as day, count(*) as requests,
 count(case when status != '200 OK' then 1 end) as errors
@@ -65,7 +65,7 @@ group by day;
 
 ### top_3_articles
 
-~~~~
+~~~~sql
 create view top3articles as (
 select substring(path from 10) as path, count(*) as hits from log
 where status = '200 OK' and path != '/'
