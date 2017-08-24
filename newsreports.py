@@ -1,7 +1,9 @@
 #!/usr/bin/python3
-# Logs Analysis project
-# for Udacity FSND SQL course (nd004)
-# Please see the README.md for information about this script's requirements
+"""
+Logs Analysis project
+for Udacity FSND SQL course (nd004)
+Please see the README.md for information about this script's requirements
+"""
 
 from newsdb import GenerateLogReports
 
