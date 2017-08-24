@@ -79,6 +79,7 @@ class GenerateLogReports():
                 c.execute(query)
                 results = c.fetchall()
                 headers = [desc[0] for desc in c.description]
+        db.close()
 
         results.insert(0, headers)
         return results
