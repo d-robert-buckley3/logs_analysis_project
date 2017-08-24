@@ -4,6 +4,7 @@
 
 import psycopg2
 
+
 class GenerateLogReports():
     """
     This class is used to generate all reports based on the blog's http logs.
@@ -11,7 +12,7 @@ class GenerateLogReports():
 
     def __init__(self):
         self.report = ""
-        self.DBNAME="news"
+        self.DBNAME = "news"
 
     def dump_report(self):
         """
@@ -61,7 +62,9 @@ class GenerateLogReports():
         columns = len(results[0])
 
         for column in range(columns):
-            col_widths.append(max([len(str(item[column])) for item in results]))
+            col_widths.append(
+                max([len(str(item[column])) for item in results])
+                )
 
         return col_widths
 

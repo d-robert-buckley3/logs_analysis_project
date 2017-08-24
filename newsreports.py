@@ -31,7 +31,8 @@ report_sections = [
     {
         'query': """
             select day, requests, errors,
-            round(((errors::numeric / requests::numeric) * 100.0),2) as err_percent
+            round(((errors::numeric / requests::numeric) * 100.0),2)
+                as err_percent
             from error_counts
             where errors > (requests / 100);
         """,
