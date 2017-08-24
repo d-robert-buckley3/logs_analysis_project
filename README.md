@@ -9,6 +9,14 @@ This script was designed to be run with the provided database available here:
 
 https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip
 
+To run this script and generate the report:
+
+~~~~
+python3 newsreports.py
+~~~~
+
+The script creates a log generator object which is used to add sections to a report.  Each section is created by providing it with a valid query for the 'news' database and a message to display as a title for the section.  The generator object will then query the database, format the results into a nice looking table, and append it to the running report text.  The script then calls the .dump_report() function to print the output to the console.
+
 ## Views
 
 The script makes use of the following views.  Here are their names and the 'create view' statements used to create them.
