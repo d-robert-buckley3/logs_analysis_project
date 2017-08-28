@@ -14,7 +14,7 @@ https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsd
 This database can be installed manually from the zip archive linked above.  To install the database, extract the contents of the .zip file into a folder and execute the .sql script provided using the 'psql' command line tool like so:
 
 ~~~~
-psql -d news -f news_data.sql
+psql -d news -f newsdata.sql
 ~~~~
 
 The system will need to have PostgreSQL installed and the daemon running.
