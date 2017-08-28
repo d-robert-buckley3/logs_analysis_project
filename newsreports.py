@@ -12,7 +12,7 @@ report_sections = [
         'query': """
             select articles.title as "Article", top_articles.hits as "Page Views"
             from articles, top_articles
-            where '/article/' || articles.slug like top_articles.path
+            where '/article/' || articles.slug = top_articles.path
             order by hits desc
             limit 3;
         """,
@@ -24,7 +24,7 @@ report_sections = [
             from authors, articles, log
             where log.status = '200 OK'
             and log.path != '/'
-            and '/article/' || articles.slug like log.path
+            and '/article/' || articles.slug = log.path
             and articles.author = authors.id
             group by authors.name
             order by "Page Views" desc;
