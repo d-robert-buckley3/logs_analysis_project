@@ -10,7 +10,7 @@ from newsdb import GenerateLogReports
 report_sections = [
     {
         'query': """
-            select articles.title, top_articles.hits
+            select articles.title as "Article", top_articles.hits as "Page Views"
             from articles, top_articles
             where '/article/' || articles.slug like top_articles.path
             order by hits desc
@@ -20,22 +20,22 @@ report_sections = [
     },
     {
         'query': """
-            select authors.name, count(*) as hits
+            select authors.name as "Author", count(*) as "Page Views"
             from authors, articles, log
             where log.status = '200 OK'
             and log.path != '/'
             and '/article/' || articles.slug like log.path
             and articles.author = authors.id
             group by authors.name
-            order by hits desc;
+            order by "Page Views" desc;
         """,
         'message': "Top Authors by total hits"
     },
     {
         'query': """
-            select day, requests, errors,
+            select day as "Date", requests as "Page Views", errors as "Errors",
             round(((errors::numeric / requests::numeric) * 100.0),2)
-                as err_percent
+                as "Error Ratio (%)"
             from error_counts
             where errors > (requests / 100);
         """,
